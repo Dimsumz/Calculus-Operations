@@ -1,0 +1,100 @@
+import java.util.*;
+
+class Polynomials {
+	
+	int coeff = 1;
+	int pow = 0;
+	
+	Polynomials(String str) {
+		int coefficiant = 1;
+		int power = 0;
+		boolean afterPower = false;
+		boolean firstCoeff = true;
+		boolean powerS = false;
+		
+		for(int i = 0; i<str.length(); i++) {
+			char ch = str.charAt(i);
+			
+			if(ch > 47 && ch < 58) {
+				if(i > 0 && afterPower) {
+					power *= 10;
+					power += Character. getNumericValue(ch);
+				}
+				else {	
+					if (!firstCoeff)
+						coefficiant *= 10;
+					else {
+						coefficiant = 0;
+						firstCoeff = false;
+					}
+					coefficiant += Character. getNumericValue(ch);
+				}
+			}
+			else if(ch == 'x') {
+				powerS = true;
+				continue;
+			}
+			else if(ch == 94) {
+				afterPower = true;
+				continue;
+			}
+			
+		}
+		
+		if(powerS && power == 0)
+			power = 1;
+		coeff = coefficiant;
+		pow = power;
+	}
+	
+	public String derive() {
+		if(pow == 1)
+			return String.valueOf(coeff);
+		else if(pow != 0) {
+			coeff *= pow;
+			pow --;
+			if(pow == 1)
+				return coeff + "x";
+			return coeff + "x^" + pow;
+		}
+		return "0";
+	}
+	
+	
+	
+	
+}
+
+
+public class Calculus {
+
+	static Scanner scanny = new Scanner(System.in);
+	public static void main(String[] args) {
+		System.out.println("Continue?");
+		while(scanny.nextLine().equals("y")) {
+			System.out.println("integral or Derivative?");
+			String str = scanny.nextLine();
+			if(str.equals("integral"))
+				integral();
+			else if(str.equals("derivative")) {
+				derivative();
+			}
+		}
+	}
+	
+	
+	public static void derivative() {
+		System.out.println("Enter a Polynomial To Derive");
+		String str = scanny.nextLine();
+		
+		ArrayList<String> monomials= new ArrayList<String>();
+		
+		int index = 0;
+		for(int i = 0; i<str.length(); i++) {
+			char ch = str.charAt(i);
+			if(ch == 43 || ch == 45) {
+				monomials.add(str.substring(index, i));
+				monomials.add(Character.toString(ch));
+				index = i +1;
+			}
+			if(i == str.length()-1) 
